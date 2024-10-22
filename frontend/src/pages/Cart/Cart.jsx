@@ -1,18 +1,23 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import './Cart.css'
 import { StoreContext } from '../../context/StoreContext'
 import { useNavigate } from 'react-router-dom';
 import { FaTrash } from "react-icons/fa";
 import { assets } from '../../assets/assets';
-const Cart = () => {
+import { toast } from 'react-toastify';
+const Cart = ({ setShowLogin }) => {
 
-    const { cartItems, food_list, addToCart, deleteFromCart, removeFromCart, getTotalCartAmount, deliveryAmount } = useContext(StoreContext);
+    const { cartItems, food_list, addToCart, deleteFromCart, removeFromCart, getTotalCartAmount, deliveryAmount, token } = useContext(StoreContext);
 
     const navigate = useNavigate();
 
+    const navigatorPath = () => {
+        token ? navigate('/order') : setShowLogin(true);
+    }
+
     return (
         <div className='cart'>
-            <table className="cart-items">
+            <div className="cart-items">
                 <div className="cart-items-title cart-items-title-heading">
                     <p>Items</p>
                     <p>Title</p>
@@ -25,7 +30,7 @@ const Cart = () => {
 
                 {
                     food_list.map((item, index) => {
-                        if (cartItems[item._id] > 0) {
+                        if (cartItems?.[item._id] > 0) {
                             return (
                                 <>
                                     <div key={index} className="cart-items-title cart-items-item">
@@ -54,7 +59,7 @@ const Cart = () => {
                         }
                     })
                 }
-            </table>
+            </div>
 
 
             <div className="cart-bottom">
@@ -74,7 +79,7 @@ const Cart = () => {
                         <p>Total</p>
                         <p>$ {getTotalCartAmount() === 0 ? 0 : (getTotalCartAmount() + deliveryAmount)}</p>
                     </div>
-                    <button onClick={() => navigate('/order')}>PROCEED TO CHECKOUT</button>
+                    <button onClick={() => navigatorPath()}>PROCEED TO CHECKOUT</button>
                 </div>
 
                 <div className="cart-prormocode">

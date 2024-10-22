@@ -17,6 +17,10 @@
     gap: 80px
 }
 
+.footer-content-left .footer-logo {
+    width: 100%;
+}
+
 .footer-content-left,
 .footer-content-center,
 .footer-content-right {

@@ -6,8 +6,15 @@
 }
 
 .navbar .logo {
-    width: 150px;
+    width: 160px;
 }
+
+.navbar .logo:hover {
+    transform: scale(1.06);
+    transition: all 0.3s ease-in-out;
+}
+
+
 
 .navbar-menu {
     display: flex;
@@ -19,11 +26,12 @@
     transition: 0.5s;
 }
 
-.navbar a:hover {
+.navbar .navbar-menu a:hover {
     color: tomato;
     padding-bottom: 2px;
     border-bottom: 2px solid tomato;
 }
+
 
 .navbar-right {
     display: flex;
@@ -110,7 +118,7 @@
 @media (max-width:1050px) {
 
     .navbar .logo {
-        width: 140px;
+        width: 150px;
     }
 
     .navbar-menu {
@@ -136,7 +144,7 @@
 @media (max-width:900px) {
 
     .navbar .logo {
-        width: 120px;
+        width: 140px;
     }
 
     .navbar-menu {
