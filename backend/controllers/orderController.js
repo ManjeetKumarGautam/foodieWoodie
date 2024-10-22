@@ -9,10 +9,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const placeOrder = async (req, res) => {
 
-    const frontendUrl = "http://localhost:5173"
+    const frontendUrl = "https://foodiewoodie-frontend.onrender.com/"
 
     try {
-        const newOrder = new Order({
+        const newOrder = new order({
             userId: req.body.userId,
             items: req.body.items,
             amount: req.body.amount,
