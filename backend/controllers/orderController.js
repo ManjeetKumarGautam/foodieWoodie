@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const placeOrder = async (req, res) => {
 
-    const frontendUrl = "https://foodiewoodie-frontend.onrender.com/"
+    const frontendUrl = "https://foodiewoodie-frontend.onrender.com"
 
     try {
         const newOrder = new order({
