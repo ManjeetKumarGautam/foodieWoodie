@@ -6,17 +6,17 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // placing user order for frontend
+const frontendUrl = "https://foodiewoodie-frontend.onrender.com"
 
 const placeOrder = async (req, res) => {
-
-    const frontendUrl = "https://foodiewoodie-frontend.onrender.com"
 
     try {
         const newOrder = new order({
             userId: req.body.userId,
             items: req.body.items,
             amount: req.body.amount,
-            address: req.body.address
+            address: req.body.address,
+            paymentMethod: req.body.paymentMethod
         })
         await newOrder.save();
         await user.findByIdAndUpdate(req.body.userId, { cartData: {} });
@@ -111,7 +111,7 @@ const cod = async (req, res) => {
     try {
         const { address, items, amount, paymentMethod } = req.body;
 
-        const newOrder = new Order({
+        const newOrder = new order({
             userId: req.user.id,
             address,
             items,
