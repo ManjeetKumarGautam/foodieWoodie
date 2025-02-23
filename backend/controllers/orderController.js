@@ -109,8 +109,9 @@ const updateStatus = async (req, res) => {
 
 const cod = async (req, res) => {
     try {
-        const { address, items, amount, paymentMethod } = req.body;
 
+        const { address, items, amount, paymentMethod } = req.body;
+        console.log("cod......");
         const newOrder = new order({
             userId: req.user.id,
             address,
