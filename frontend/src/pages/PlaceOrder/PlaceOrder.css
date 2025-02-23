@@ -35,3 +35,19 @@
     width: 100%;
     max-width: max(40%, 500px);
 }
+
+.payment-method {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.payment-method>label {
+    border: 1px solid #c5c5c5;
+    padding: 20px 10px;
+}
+
+.payment-method>label>input {
+    margin-right: 5px;
+}

@@ -7,13 +7,9 @@ import { assets } from '../../assets/assets';
 import { toast } from 'react-toastify';
 const Cart = ({ setShowLogin }) => {
 
-    const { cartItems, food_list, addToCart, deleteFromCart, removeFromCart, getTotalCartAmount, deliveryAmount, token } = useContext(StoreContext);
+    const { cartItems, food_list, addToCart, deleteFromCart, removeFromCart, getTotalCartAmount, deliveryAmount } = useContext(StoreContext);
 
     const navigate = useNavigate();
-
-    const navigatorPath = () => {
-        token ? navigate('/order') : setShowLogin(true);
-    }
 
     return (
         <div className='cart'>
@@ -79,7 +75,7 @@ const Cart = ({ setShowLogin }) => {
                         <p>Total</p>
                         <p>$ {getTotalCartAmount() === 0 ? 0 : (getTotalCartAmount() + deliveryAmount)}</p>
                     </div>
-                    <button onClick={() => navigatorPath()}>PROCEED TO CHECKOUT</button>
+                    <button onClick={() => navigate('/order')}>PROCEED TO CHECKOUT</button>
                 </div>
 
                 <div className="cart-prormocode">

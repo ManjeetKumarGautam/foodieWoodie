@@ -1,5 +1,5 @@
 .navbar {
-    padding: 20px 0px;
+    padding: 20px 10%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -168,8 +168,6 @@
 
 
 @media (max-width:750px) {
-
-
 
     .navbar-menu {
         display: none;

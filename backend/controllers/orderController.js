@@ -105,4 +105,26 @@ const updateStatus = async (req, res) => {
         res.json({ success: false, message: "Error" });
     }
 }
-export { placeOrder, verifyOrder, UserOrders, listOrders, updateStatus }
+
+
+const cod = async (req, res) => {
+    try {
+        const { address, items, amount, paymentMethod } = req.body;
+
+        const newOrder = new Order({
+            userId: req.user.id,
+            address,
+            items,
+            amount,
+            paymentMethod, // "cod"
+            status: "Pending", // Order status for COD
+        });
+
+        await newOrder.save();
+        res.json({ success: true, message: "Order placed successfully via Cash on Delivery!" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
+export { placeOrder, verifyOrder, UserOrders, listOrders, updateStatus, cod }

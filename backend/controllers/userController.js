@@ -30,12 +30,12 @@ const createToken = (id) => {
 
 const registerUser = async (req, res) => {
 
-    const { name, password, email } = req.body;
+    const { username, password, email } = req.body;
 
     try {
         const exist = await User.findOne({ email });
         if (exist) {
-            return res.json({ success: false, message: "User Already exist." })
+            return res.json({ success: false, message: "User Already exist, please login" })
         }
         if (!validator.isEmail(email)) {
             return res.json({ success: false, message: "Please enter a valid email." })
@@ -48,7 +48,7 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = User({
-            name: name,
+            name: username,
             email: email,
             password: hashedPassword
         })

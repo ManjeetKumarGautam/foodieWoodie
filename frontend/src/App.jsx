@@ -20,10 +20,10 @@ const App = () => {
     <>
       <ToastContainer />
       {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : <></>}
+      <Navbar setShowLogin={setShowLogin} />
 
       <div className="app" >
 
-        <Navbar setShowLogin={setShowLogin} />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/cart' element={<Cart setShowLogin={setShowLogin} />} />

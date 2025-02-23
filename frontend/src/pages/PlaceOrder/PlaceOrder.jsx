@@ -1,8 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
-import './PlaceOrder.css'
-const PlaceOrder = () => {
+import React, { useContext, useEffect, useState } from 'react';
+import './PlaceOrder.css';
+import { StoreContext } from '../../context/StoreContext';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
+const PlaceOrder = () => {
     const { getTotalCartAmount, deliveryAmount, token, food_list, cartItems, url } = useContext(StoreContext);
+    const navigate = useNavigate();
+
     const [data, setData] = useState({
         firstName: "",
         lastName: "",
@@ -13,47 +18,62 @@ const PlaceOrder = () => {
         zipcode: "",
         country: "",
         phone: ""
-    })
+    });
+
+    const [paymentMethod, setPaymentMethod] = useState("cod"); // Default: Online Payment
 
     const onChangeHandler = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setData(data => ({ ...data, [name]: value }))
-    }
+        const { name, value } = event.target;
+        setData((prevData) => ({ ...prevData, [name]: value }));
+    };
 
     const placeOrder = async (event) => {
         event.preventDefault();
-        let orderItems = [];
-        food_list.map((item) => {
-            if (cartItems[item._id] > 0) {
-                let itemInfo = item;
-                itemInfo["quantity"] = cartItems[item._id];
-                orderItems.push(itemInfo);
-            }
-        })
+        let orderItems = food_list
+            .filter(item => cartItems?.[item._id] > 0)
+            .map(item => ({ ...item, quantity: cartItems[item._id] }));
+
         let orderData = {
             address: data,
             items: orderItems,
-            amount: getTotalCartAmount() + 2,
+            amount: getTotalCartAmount() + deliveryAmount,
+            paymentMethod
+        };
+
+        if (paymentMethod === "online") {
+            // Online Payment Flow
+            try {
+                let response = await axios.post(url + "/api/order/place", orderData, { headers: { token } });
+                if (response.data.success) {
+                    window.location.replace(response.data.session_url);
+                } else {
+                    alert("Error in processing payment.");
+                }
+            } catch (error) {
+                alert("Something went wrong!");
+            }
+        } else {
+            // Cash on Delivery Flow
+            try {
+                let response = await axios.post(url + "/api/order/cod", orderData, { headers: { token } });
+                if (response.data.success) {
+                    alert("Order placed successfully! Your order will be delivered soon.");
+                    navigate('/');
+                } else {
+                    alert("Error placing order.");
+                }
+            } catch (error) {
+                alert("Something went wrong!");
+            }
         }
-        let response = await axios.post(url + "/api/order/place", orderData, { headers: { token } })
-        if (response.data.success) {
-            const { session_url } = response.data;
-            window.location.replace(session_url);
-        }
-        else {
-            alert("Error");
-        }
-    }
-    const navigate = useNavigate();
+    };
+
     useEffect(() => {
-        if (!token) {
+        if (!token || getTotalCartAmount() === 0) {
             navigate('/cart');
         }
-        else if (getTotalCartAmount() == 0) {
-            navigate('/cart');
-        }
-    }, [token])
+    }, [token]);
+
     return (
         <form onSubmit={placeOrder} className='place-order'>
             <div className="place-order-left">
@@ -74,6 +94,7 @@ const PlaceOrder = () => {
                 </div>
                 <input required type="text" name="phone" onChange={onChangeHandler} value={data.phone} placeholder='Phone Number' />
             </div>
+
             <div className="place-order-right">
                 <div className="cart-total">
                     <h2>Cart Totals</h2>
@@ -91,15 +112,36 @@ const PlaceOrder = () => {
                         <p>Total</p>
                         <p>$ {getTotalCartAmount() === 0 ? 0 : (getTotalCartAmount() + deliveryAmount)}</p>
                     </div>
-                    <button type='submit'>PROCEED TO PAYMENT</button>
 
+
+                    <div className="payment-method">
+                        <h2>Select Payment Method:</h2>
+                        <label>
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="cod"
+                                checked={paymentMethod === "cod"}
+                                onChange={() => setPaymentMethod("cod")}
+                            /> Cash on Delivery
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="online"
+                                checked={paymentMethod === "online"}
+                                onChange={() => setPaymentMethod("online")}
+                            /> Online Payment
+                        </label>
+
+                    </div>
+
+                    <button type='submit'>PROCEED TO PAYMENT</button>
                 </div>
             </div>
         </form>
-    )
-}
-import './PlaceOrder.css'
-import { StoreContext } from '../../context/StoreContext'
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-export default PlaceOrder
+    );
+};
+
+export default PlaceOrder;
