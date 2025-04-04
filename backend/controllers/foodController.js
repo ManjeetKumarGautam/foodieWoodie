@@ -40,9 +40,9 @@ const listFood = async (req, res) => {
     }
 }
 
-const foodItem = async (req, res) => {
+const updateFood = async (req, res) => {
     try {
-        const foodItem = await food.findById(req.body.id);
+        await food.findByIdAndUpdate(req.params.id, req.body);
         res.json({ success: true, data: foodItem })
     } catch (error) {
         res.json({ success: false, message: "Error" })
@@ -64,4 +64,4 @@ const removeFood = async (req, res) => {
         res.json({ success: false, message: "Error" })
     }
 }
-export { addFood, listFood, removeFood, foodItem }
+export { addFood, listFood, removeFood, updateFood }

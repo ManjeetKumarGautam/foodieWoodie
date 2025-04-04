@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import './App.css'
+import LoginPopup from './components/LoginPopup/LoginPopup'
 import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 import { Routes, Route } from 'react-router-dom'
@@ -15,14 +16,19 @@ function App() {
 
   const [updateFood, setUpdateFood] = useState(false);
 
-  const [food, setFood] = useState({});
+  const [food, setFood] = useState();
 
-  const url = "https://foodiewoodie-5up0.onrender.com";
-  // const url = "http://localhost:4000";
+
+  // const url = "https://foodiewoodie-5up0.onrender.com";
+  const url = "http://localhost:4000";
+
+  const [showLogin, setShowLogin] = useState(true);
+
   return (
     <>
       {updateFood ? <FoodUpdate setUpdateFood={setUpdateFood} food={food} url={url} setFood={setFood} /> : <></>}
       <ToastContainer />
+      {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : <></>}
       <Navbar />
       <hr />
       <div className="app-content">

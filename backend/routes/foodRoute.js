@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import express from "express"
-import { addFood, foodItem, listFood, removeFood } from "../controllers/foodController.js"
+import { addFood, listFood, removeFood, updateFood } from "../controllers/foodController.js"
 import multer from "multer"
 
 const foodRouter = express.Router();
@@ -21,6 +21,6 @@ foodRouter.get("/list", listFood)
 
 foodRouter.post("/remove", removeFood)
 
-foodRouter.get("/item", foodItem)
+foodRouter.put("/update/:id'", updateFood)
 
 export default foodRouter;

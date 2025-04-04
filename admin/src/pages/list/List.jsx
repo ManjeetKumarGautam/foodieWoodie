@@ -30,11 +30,7 @@ const List = ({ url, setUpdateFood, setFood }) => {
             toast.error(response.data.message);
         }
     }
-    const fetchFood = async (id) => {
-        const response = await axios.get(`${url}/api/food/item` + { id: foodId });
-        console.log(response.data.data);
-        setFood(response.data.data);
-    }
+    
 
     useEffect(() => {
         fetchFoodList();
@@ -63,7 +59,7 @@ const List = ({ url, setUpdateFood, setFood }) => {
                                 <p>{item.category}</p>
                                 <p>{item.price}</p>
                                 <div className='action-btn'>
-                                    <p className='cursor' onClick={() => { setUpdateFood(true); fetchFood(item._id) }}><FaRegEdit /></p>
+                                    <p className='cursor' onClick={() => { setUpdateFood(true); setFood(item) }}><FaRegEdit /></p>
                                     <p className='cursor' onClick={() => deleteFoodItem(item._id)}><FaTrash /></p>
                                 </div>
 

@@ -5,7 +5,7 @@ import { FaTimes } from "react-icons/fa";
 import './FoodUpdate.css'
 
 const FoodUpdate = ({ setUpdateFood, food, url, setFood }) => {
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState(food.image);
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
@@ -13,9 +13,21 @@ const FoodUpdate = ({ setUpdateFood, food, url, setFood }) => {
         setFood(food => ({ ...food, [name]: value }));
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.put(`/api/food/update/${id}`, food);
+            alert("Food item updated!");
+            navigate('/admin/foods'); // Redirect to food list or dashboard
+        } catch (error) {
+            alert("Error updating food item.");
+            console.error(error);
+        }
+    }
+
     return (
         <div className='food-update-popup '>
-            <form className="flex-col food-update-popup-container">
+            <form className="flex-col food-update-popup-container" onSubmit={handleSubmit}>
                 <div className="food-update-popup-title">
                     <h2>Update Food</h2>
                     <p className='cross-btn' onClick={() => setUpdateFood(false)}><FaTimes /></p>
@@ -23,7 +35,7 @@ const FoodUpdate = ({ setUpdateFood, food, url, setFood }) => {
                 <div className="img-upload flex-col">
                     <p>Upload Image</p>
                     <label htmlFor="image">
-                        <img src={image ? URL.createObjectURL(image) : url + "/food/image/" + food.imageName} alt="" />
+                        <img src={image ? URL.createObjectURL(image) : assets.upload_area} alt="" />
                     </label>
                     <input type="file" name="" id="image" onChange={(e) => setImage(e.target.files[0])} hidden />
                 </div>
@@ -55,7 +67,7 @@ const FoodUpdate = ({ setUpdateFood, food, url, setFood }) => {
                         <input onChange={onChangeHandler} value={food.price} type="number" name="price" id="" placeholder='$ 20' />
                     </div>
                 </div>
-                <button type="submit" className='btn'>Update Item</button>
+                <button type="submit" className='btn'>Update Food</button>
             </form >
         </div >
     )
