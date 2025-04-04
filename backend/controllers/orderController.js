@@ -1,4 +1,4 @@
-import order from "../models/order.js";
+import orderModel from "../models/order.js";
 import user from "../models/user.js";
 
 import Stripe from "stripe";
@@ -7,16 +7,16 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // placing user order for frontend
 const frontendUrl = "https://foodiewoodie-frontend.onrender.com"
-
+// const frontendUrl = "https://localhost:5174";
 const placeOrder = async (req, res) => {
 
     try {
-        const newOrder = new order({
+        const newOrder = new orderModel({
             userId: req.body.userId,
             items: req.body.items,
             amount: req.body.amount,
             address: req.body.address,
-            paymentMethod: req.body.paymentMethod
+            paymentMode: req.body.paymentMethod
         })
         await newOrder.save();
         await user.findByIdAndUpdate(req.body.userId, { cartData: {} });
@@ -53,7 +53,7 @@ const placeOrder = async (req, res) => {
         res.json({ success: true, session_url: session.url })
     } catch (error) {
         console.log(error);
-        res.json({ success: true, message: "Error" });
+        res.json({ success: false, message: "Error" });
 
     }
 }
@@ -62,11 +62,11 @@ const verifyOrder = async (req, res) => {
     const { orderId, success } = req.body;
     try {
         if (success == "true") {
-            await order.findByIdAndUpdate(orderId, { payment: true });
+            await orderModel.findByIdAndUpdate(orderId, { payment: true });
             res.json({ success: true, message: "Paid" });
         }
         else {
-            await order.findByIdAndDelete(orderId);
+            await orderModel.findByIdAndDelete(orderId);
             res.json({ success: false, message: "Not Paid" })
         }
     } catch (error) {
@@ -77,7 +77,7 @@ const verifyOrder = async (req, res) => {
 // user orders for frontend
 const UserOrders = async (req, res) => {
     try {
-        const orders = await order.find({ userId: req.body.userId });
+        const orders = await orderModel.find({ userId: req.body.userId });
         res.json({ success: true, data: orders });
     } catch (error) {
         console.log(error);
@@ -88,7 +88,7 @@ const UserOrders = async (req, res) => {
 // Listing orders of admin panel
 const listOrders = async (req, res) => {
     try {
-        const orders = await order.find({});
+        const orders = await orderModel.find();
         res.json({ success: true, data: orders });
     } catch (error) {
         console.log(error);
@@ -98,7 +98,7 @@ const listOrders = async (req, res) => {
 // updating order status
 const updateStatus = async (req, res) => {
     try {
-        await order.findByIdAndUpdate(req.body.orderId, { status: req.body.status });
+        await orderModel.findByIdAndUpdate(req.body.orderId, { status: req.body.status });
         res.json({ success: true, message: "Status Updated" });
     } catch (error) {
         console.log(error);
@@ -110,19 +110,17 @@ const updateStatus = async (req, res) => {
 const cod = async (req, res) => {
     try {
 
-        const { address, items, amount, paymentMethod } = req.body;
-        console.log("cod......");
-        const newOrder = new order({
-            userId: req.user.id,
-            address,
-            items,
-            amount,
-            paymentMethod, // "cod"
-            status: "Pending", // Order status for COD
+        const newOrder = new orderModel({
+            userId: req.body.userId,
+            items: req.body.items,
+            amount: req.body.amount,
+            address: req.body.address,
+            paymentMode: req.body.paymentMode
         });
-
         await newOrder.save();
-        res.json({ success: true, message: "Order placed successfully via Cash on Delivery!" });
+        await user.findByIdAndUpdate(req.body.userId, { addresses: req.body.address })
+
+        res.json({ success: true, message: "Order placed successfully! Your order will be delivered soon." });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }

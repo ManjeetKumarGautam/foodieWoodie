@@ -10,7 +10,6 @@ const Orders = ({ url }) => {
         const response = await axios.get(url + "/api/order/list");
         if (response.data.success) {
             setOrders(response.data.data);
-            console.log(response.data.data);
         }
         else {
             toast.error("Error")
@@ -42,7 +41,7 @@ const Orders = ({ url }) => {
                             <p className='order-item-food'>
                                 {
                                     order.items.map((item, index) => {
-                                        if (index === order.item.length - 1) {
+                                        if (index === order.items.length - 1) {
                                             return item.name + " x " + item.quantity
                                         }
                                         else {
@@ -62,9 +61,9 @@ const Orders = ({ url }) => {
                         <p>Items : {order.items.length}</p>
                         <p>${order.amount}</p>
                         <select onChange={(event) => statusHandler(event, order._id)} value={order.status}>
-                            <option value="Food Processing" selected></option>
-                            <option value="Out for Delivery"></option>
-                            <option value="Delivered"></option>
+                            <option value="Food Processing" selected>Food Processing</option>
+                            <option value="Out for Delivery">Out for Delivery</option>
+                            <option value="Delivered">Delivered</option>
                         </select>
                     </div>
                 ))}</div>

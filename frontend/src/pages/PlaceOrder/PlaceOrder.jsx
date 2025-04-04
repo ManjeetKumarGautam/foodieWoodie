@@ -37,7 +37,7 @@ const PlaceOrder = () => {
             address: data,
             items: orderItems,
             amount: getTotalCartAmount() + deliveryAmount,
-            paymentMethod
+            paymentMode: paymentMethod
         };
 
         if (paymentMethod === "online") {
@@ -55,15 +55,16 @@ const PlaceOrder = () => {
         } else {
             // Cash on Delivery Flow
             try {
+                console.log("cash on delivery.....")
                 let response = await axios.post(url + "/api/order/cod", orderData, { headers: { token } });
                 if (response.data.success) {
-                    alert("Order placed successfully! Your order will be delivered soon.");
-                    navigate('/');
+                    toast.success(response.data.message);
+
                 } else {
-                    alert("Error placing order.");
+                    toast.error(response.data.message);
                 }
             } catch (error) {
-                alert("Something went wrong!");
+                toast.error("Something went wrong!");
             }
         }
     };
