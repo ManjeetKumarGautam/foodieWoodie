@@ -118,7 +118,6 @@ const cod = async (req, res) => {
             paymentMode: req.body.paymentMode
         });
         await newOrder.save();
-        await user.findByIdAndUpdate(req.body.userId, { addresses: req.body.address })
 
         res.json({ success: true, message: "Order placed successfully! Your order will be delivered soon." });
     } catch (error) {
