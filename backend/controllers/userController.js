@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import validator from "validator";
 
-
 // login user
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -30,8 +29,7 @@ const createToken = (id) => {
 
 const registerUser = async (req, res) => {
 
-    const { username, password, email } = req.body;
-
+    const { name, password, email } = req.body;
     try {
         const exist = await User.findOne({ email });
         if (exist) {
@@ -47,8 +45,8 @@ const registerUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUser = User({
-            name: username,
+        const newUser = new User({
+            name: name,
             email: email,
             password: hashedPassword
         })

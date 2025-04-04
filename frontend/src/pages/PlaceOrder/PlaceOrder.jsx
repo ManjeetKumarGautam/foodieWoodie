@@ -56,7 +56,6 @@ const PlaceOrder = () => {
         } else {
             // Cash on Delivery Flow
             try {
-                console.log("cash on delivery.....")
                 let response = await axios.post(url + "/api/order/cod", orderData, { headers: { token } });
                 if (response.data.success) {
                     toast.success(response.data.message);

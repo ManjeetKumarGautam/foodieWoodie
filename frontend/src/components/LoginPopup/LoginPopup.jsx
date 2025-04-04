@@ -38,7 +38,6 @@ const LoginPopup = ({ setShowLogin }) => {
         const response = await axios.post(newUrl, data);
 
         if (response.data.success) {
-            console.log(response);
             setShowLogin(false);
             setToken(response.data.token);
             localStorage.setItem("token", response.data.token);
@@ -58,9 +57,9 @@ const LoginPopup = ({ setShowLogin }) => {
                     <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="" />
                 </div>
                 <div className="login-popup-inputs">
-                    {currState === "Login" ? <></> : <input type="text" onChange={onChangeHandler} value={data.name} name="name" placeholder='Your Name' />}
-                    <input type="email" onChange={onChangeHandler} value={data.email} name="email" placeholder='Your email' />
-                    <input type="password" onChange={onChangeHandler} value={data.password} name="password" placeholder='Password' />
+                    {currState === "Login" ? <></> : <input type="text" onChange={onChangeHandler} value={data.name} name="name" placeholder='Your Name' required />}
+                    <input type="email" onChange={onChangeHandler} value={data.email} name="email" placeholder='Your email' required />
+                    <input type="password" onChange={onChangeHandler} value={data.password} name="password" placeholder='Password' required />
                 </div>
                 <div className="login-popup-condition">
                     <input type="checkbox" name="" id="" required />
