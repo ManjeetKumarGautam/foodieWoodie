@@ -3,9 +3,10 @@ import { assets } from '../../assets/assets'
 import { useState } from 'react';
 import { FaTimes } from "react-icons/fa";
 import './FoodUpdate.css'
+import axios from 'axios';
 
 const FoodUpdate = ({ setUpdateFood, food, url, setFood }) => {
-    const [image, setImage] = useState(food.image);
+    const [newImage, setNewImage] = useState();
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
@@ -15,10 +16,15 @@ const FoodUpdate = ({ setUpdateFood, food, url, setFood }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
-            await axios.put(`/api/food/update/${id}`, food);
+            console.log(food);
+
+            await axios.put(`${url}/api/food/update/${food._id}`, food);
             alert("Food item updated!");
-            navigate('/admin/foods'); // Redirect to food list or dashboard
+
+
+            // Redirect to food list or dashboard
         } catch (error) {
             alert("Error updating food item.");
             console.error(error);
@@ -35,9 +41,9 @@ const FoodUpdate = ({ setUpdateFood, food, url, setFood }) => {
                 <div className="img-upload flex-col">
                     <p>Upload Image</p>
                     <label htmlFor="image">
-                        <img src={image ? URL.createObjectURL(image) : assets.upload_area} alt="" />
+                        <img src={newImage ? URL.createObjectURL(newImage) : food.image} alt="" />
                     </label>
-                    <input type="file" name="" id="image" onChange={(e) => setImage(e.target.files[0])} hidden />
+                    <input type="file" name="" id="image" onChange={(e) => setNewImage(e.target.files[0])} hidden />
                 </div>
                 <div className="product-name flex-col">
                     <p>Product Name</p>

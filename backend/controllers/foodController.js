@@ -41,9 +41,23 @@ const listFood = async (req, res) => {
 }
 
 const updateFood = async (req, res) => {
+
+    const { id } = req.params;
+    const { name, description, category, price } = req.body;
+
     try {
-        await food.findByIdAndUpdate(req.params.id, req.body);
-        res.json({ success: true, data: foodItem })
+        const newFood = await food.findById(id);
+        if (!newFood) return res.status(404).json({ message: "Food item not found" });
+
+        newFood.name = name;
+        newFood.description = description;
+        newFood.category = category;
+        newFood.price = price;
+
+        console.log(newFood)
+
+        await newFood.save();
+        res.status(200).json({ message: "Food updated successfully", food });
     } catch (error) {
         res.json({ success: false, message: "Error" })
     }

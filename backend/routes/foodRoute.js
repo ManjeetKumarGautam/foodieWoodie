@@ -21,6 +21,6 @@ foodRouter.get("/list", listFood)
 
 foodRouter.post("/remove", removeFood)
 
-foodRouter.put("/update/:id'", updateFood)
+foodRouter.put("/update/:id", updateFood)
 
 export default foodRouter;
