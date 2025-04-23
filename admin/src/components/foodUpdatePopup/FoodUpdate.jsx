@@ -1,7 +1,7 @@
 import React from 'react'
-import { assets } from '../../assets/assets'
 import { useState } from 'react';
 import { FaTimes } from "react-icons/fa";
+import { toast } from 'react-toastify';
 import './FoodUpdate.css'
 import axios from 'axios';
 
@@ -21,13 +21,11 @@ const FoodUpdate = ({ setUpdateFood, food, url, setFood }) => {
             console.log(food);
 
             await axios.put(`${url}/api/food/update/${food._id}`, food);
-            alert("Food item updated!");
+            setUpdateFood(false);
+            toast.success("Food item updated!");
 
-
-            // Redirect to food list or dashboard
         } catch (error) {
-            alert("Error updating food item.");
-            console.error(error);
+            toast.error("Error updating food item.");
         }
     }
 

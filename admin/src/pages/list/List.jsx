@@ -30,7 +30,7 @@ const List = ({ url, setUpdateFood, setFood }) => {
             toast.error(response.data.message);
         }
     }
-    
+
 
     useEffect(() => {
         fetchFoodList();
